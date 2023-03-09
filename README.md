@@ -1,5 +1,5 @@
 # Group ID
-## Office Management System
+## Office Management System - Backend
 
 ## Group Details
 Member Details:
@@ -11,12 +11,12 @@ Member Details:
 | Alahakoon ASGP | IT19960432 | ShalithaAlahakoon | 
 
 ## Project Description
-This is a system implemented for a office. There are several functions as Employee Management, Client Management, Inventory Management, Document Management. Add Details, Read Details, Update Status, Update Details, Delete Details are main operations for all of the functions. 
+This is a system implemented for a office. There are several functions as Employee Management, Client Management, Inventory Management, Document Management. Add Details, Read Details, Update Status, Update Details, Delete Details are main operations for all of the functions. This is the backend of the office management system.
 
 Priyanka PDMK - Employee Management | Jayawardana GVHD - Client Management | Dharmadasa KRWS - Inventory Management | Alahakoon ASGP - Document Management
 
 ## Technologies
-Language -  | Database -  | IDE -  | Integrate Technology Service - GitHub
+Language - NodeJS | Database - MongoDB | IDE - VS Code | Integrate Technology Service - GitHub
 
 ## How to get started with your app
 ### Prerequisites
