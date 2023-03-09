@@ -11,7 +11,7 @@ Member Details:
 | Alahakoon ASGP | IT19960432 | ShalithaAlahakoon | 
 
 ## Project Description
-This is a system implemented for a office. There are several functions as Employee Management, Client Management, Inventory Management, Document Management. Add Details, Read Details, Update Status, Update Details, Delete Details are main operations for all of the functions. Filter by various kinds of useful data are available for every function and all the forms are validated accordingly.
+This is a system implemented for a office. There are several functions as Employee Management, Client Management, Inventory Management, Document Management. Add Details, Read Details, Update Status, Update Details, Delete Details are main operations for all of the functions. 
 
 Priyanka PDMK - Employee Management | Jayawardana GVHD - Client Management | Dharmadasa KRWS - Inventory Management | Alahakoon ASGP - Document Management
 
