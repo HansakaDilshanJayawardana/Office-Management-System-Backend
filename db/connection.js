@@ -1,4 +1,4 @@
-require("dotenv").config() // load .env variables
+require("dotenv").config({ path: 'env' }) // load .env variables
 const mongoose = require("mongoose") //import fresh mongoose object
 const {log} = require("mercedlogger") // import merced logger
 
