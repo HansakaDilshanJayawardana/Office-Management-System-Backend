@@ -5,21 +5,15 @@ const router = Router();
 const upload = multer({ dest: "uploads/" });
 
 //Add Document
-router.post("/add", async (req, res) => {
-    upload.single("file"), async (req, res, next) => {
-        if(err){
-            res.status(500).json({
-                success: false,
-                message: err.message
-            });
-        }else{
+router.post("/add", upload.single("file"), async (req, res, next) => {
+ try{
             const file = req.file;
             const formData = req.body;
 
-            const { title, type, size,access,user } = formData;
+            const { access,user } = formData;
 
             //Validation
-            if(!title || !description) {
+            if(!access || !user) {
                 return res.status(400).json({
                     success: false,
                     message: 'Please enter all fields'
@@ -30,10 +24,10 @@ router.post("/add", async (req, res) => {
 
             //create document
             const newDocument = new Document({
-                title,
+                title: file.originalname,
                 url: file.path,
-                type,
-                size,
+                type: file.mimetype,
+                size: file.size,
                 access,
                 user
             });
@@ -58,8 +52,10 @@ router.post("/add", async (req, res) => {
 
 
         }
-    }
-});
+        catch(err){
+            next(err);
+        }
+    });
 
 
 module.exports = router;
