@@ -22,6 +22,10 @@ const DocumentSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    updatedAt: {//date the file was last updated
+        type: Date,
+        default: null
+    },
     access: { //public, private, shared
         type: String,
         required: true
