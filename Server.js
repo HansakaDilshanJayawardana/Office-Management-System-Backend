@@ -26,6 +26,7 @@ app.get("/", (req, res) => {res.send("this is the test route to make sure server
 app.use("/user", UserRouter) // send all "/user" requests to UserRouter for routing
 app.use("/inventory", InventoryRouter) // send all "/inventory" requests to InvenoryRouter for routing
 app.use("/document", DocumentRouter) // send all "/document" requests to DocumentRouter for routing
+app.use("/employee", EmployeeRouter)//send all /employee requests to EmployeeRouter for rounting
 
 // APP LISTENER
 app.listen(PORT, () => log.green("SERVER STATUS", `Listening on port ${PORT}`))
