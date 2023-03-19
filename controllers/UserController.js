@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
       if (result) {
         // sign token and send it in response
         const token = await jwt.sign({ username: user.username }, SECRET);
-        res.json({ token });
+        res.json({ success:true,token });
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
