@@ -56,4 +56,25 @@ router.get('/get-all', async (req, res) => {
     }
 });
 
+// Endpoint for retrieving one client
+router.get('/get/:id', async (req, res) => {
+    try {
+        const client = await Client.findById(req.params.id);
+    
+        if (!client) {
+          return res.status(404).json({ msg: 'Client not found' });
+        }
+    
+        res.json(client);
+    } catch (err) {
+        console.error(err.message);
+    
+        if (err.kind === 'ObjectId') {
+          return res.status(404).json({ msg: 'Client not found' });
+        }
+    
+        res.status(500).send('Server Error');
+    }
+});
+
 module.exports = router;
