@@ -2,62 +2,61 @@ const mongoose = require('mongoose');
 
 const ClientSchema = new mongoose.Schema({
     firstName: {
-        type: String,
-        required: true
+        type: String
     },
 
     lastName: {
-        type: String,
-        required: true
+        type: String
     },
 
     gender: {
-        type: String,
-        required: true
+        type: String
     },
 
     nic: {
         type: String,
-        required: true,
         unique: true
     },
 
     address: {
-        type: String,
-        required: true
+        type: String
     },
 
     mobile: {
         type: Number,
-        required: true,
         unique: true
     },
 
     email: {
         type: String,
-        required: true,
         unique: true
     },
 
-    profilePicUrl: {
-        type: String,
-        default: '',
-    },
+    // profilePicUrl: {
+    //     type: String,
+    //     default: '',
+    // },
 
     registerDate: {
-        type: Date,
-        default: Date.now,
+        type: Date
     },
 
     createdAt: {
-        type: Date,
-        default: Date.now
+        type: Date
     },
 
     createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    
+    modifiedAt: {
+        type: Date
+    },
+
+    modifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 
