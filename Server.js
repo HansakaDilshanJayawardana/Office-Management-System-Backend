@@ -5,7 +5,7 @@ const {log} = require("mercedlogger") // import mercedlogger's log function
 const cors = require("cors") // import cors
 const UserRouter = require("./controllers/UserController") //import User Routes
 const InventoryRouter = require("./controllers/InventoryController") //import Inventory Routes
-
+const ClientRouter = require("./controllers/ClientController") // import Client Routes
 
 //DESTRUCTURE ENV VARIABLES WITH DEFAULT VALUES
 const {PORT = 3000} = process.env
@@ -25,6 +25,7 @@ app.get("/", (req, res) => {res.send("this is the test route to make sure server
 
 app.use("/user", UserRouter) // send all "/user" requests to UserRouter for routing
 app.use("/inventory", InventoryRouter) // send all "/inventory" requests to InvenoryRouter for routing
+app.use("/client", ClientRouter) // send all "/client" requests to ClientRouter for routing
 
 // APP LISTENER
 app.listen(PORT, () => log.green("SERVER STATUS", `Listening on port ${PORT}`))
