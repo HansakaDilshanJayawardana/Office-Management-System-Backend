@@ -6,6 +6,7 @@ const cors = require("cors") // import cors
 const UserRouter = require("./controllers/UserController") //import User Routes
 const InventoryRouter = require("./controllers/InventoryController") //import Inventory Routes
 const DocumentRouter = require("./controllers/DocumentController") //import Document Routes
+const EmployeeRouter = require("./controllers/employeeController") //import Employee Routes
 
 //DESTRUCTURE ENV VARIABLES WITH DEFAULT VALUES
 const {PORT = 3000} = process.env
