@@ -1,31 +1,52 @@
 const mongoose = require('mongoose');
+// const {Schema, model} = require("../db/connection")
 
 const EmployeeSchema = new mongoose.Schema({
+    
     name: {
-        type:String,
-        required:true
+        type:String
     },
 
     gender: {
-        type:String,
-        required:true
+        type:String
     },
 
     nic: {
         type:String,
-        required:true
+        unique: true
     },
 
     address: {
-        type:String,
-        required:true
+        type:String
     },
 
     contact: {
         type:Number,
-        required:true
+        unique: true
+    },
+
+    email: {
+        type: String,
+        unique: true
+    },
+
+    createdAt: {
+        type: Date
+    },
+
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     
+    modifiedAt: {
+        type: Date
+    },
+
+    modifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
 });
 
 const Employee = mongoose.model('Employee',EmployeeSchema);
