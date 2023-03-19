@@ -45,4 +45,15 @@ router.post('/add', async (req, res) => {
   }
 });
 
+// Endpoint for retrieving all the clients
+router.get('/get-all', async (req, res) => {
+    try {
+        const clients = await Client.find();
+        res.json(clients);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 module.exports = router;
