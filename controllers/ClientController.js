@@ -108,4 +108,26 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
+// Endpoint for delete client
+router.delete("/delete/:id", async (req, res)  => {
+    try {
+        const client = await Client.findById(req.params.id);
+    
+        if (!client) {
+          return res.status(404).json({ msg: 'Client not found' });
+        } else {
+            await client.deleteOne();
+            res.json({ message: 'Client has been deleted' });
+        }
+    } catch (err) {
+        console.error(err.message);
+    
+        if (err.kind === 'ObjectId') {
+          return res.status(404).json({ msg: 'Client not found' });
+        }
+    
+        res.status(500).send('Server Error');
+    }
+});
+
 module.exports = router;
