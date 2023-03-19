@@ -1,119 +1,128 @@
-const Employee = require('../models/Employee');
-const { Router } = require("express"); // import router from express
+const Employee = require('../models/employee');
+const User = require('../models/User');
+const { Router } = require("express");
 
 const router = Router();
 
-//Add an Employee
-router.post("/add", async (req, res) => {
-    const { name, gender, nic, address, contact } = req.body;
-
-    //Validation
-    if(!name  || !gender || !nic || !address || !contact) {
-        return res.status(400).json({
-            success: false,
-            message: 'Please Fill All the Fields'
-        });
+// Endpoint for adding a new employee
+router.post('/add', async (req, res) => {
+  try {
+    // Validate the request body
+    const { name, gender, nic, address, contact, email, username } = req.body;
+    if (!name || !gender || !nic || !address || !contact || !email) {
+      return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    //check if employee already exists
-    const employee = await Employee.findOne({ nic });
-
-    //if employee exists
-    if (employee) {
-        return res.status(400).json({
-            success: false,
-            message: 'Employee Already Exists'
-        });
+    // Check if the email is already registered
+    const existingEmployee = await Employee.findOne({ email });
+    if (existingEmployee) {
+      return res.status(400).json({ message: 'Employee already exists.' });
     }
-
-    //create employee
-    const newEmployee = new Employee({
-        name,
-        gender,
-        nic, 
-        address,
-        contact
+    
+    // Create a new employee
+    const creator  =  await User.findOne({ 'username': username });
+    const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
+    const employee = new Employee({
+      name,
+      gender,
+      nic,
+      address,
+      contact,
+      email,
+      createdBy,
+      createdAt: Date.now()
     });
 
-    //save employee
-    await newEmployee.save();
+    // Save the employee to the database
+    await employee.save();
+    res.status(201).json(employee);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Server Error.' });
+  }
+});
 
-    if (newEmployee) {
-        res.status(201).json({
-            success: true,
-            data: newEmployee
-        });
-    }
-    else {
-        res.status(400).json({
-            success: false,
-            message: 'Employee not Added'
-        });
-        throw new Error('Employee not added');
+// Endpoint for updating an existing employee
+router.put('/update/:id', async (req, res) => {
+    try {
+        const employee = await Employee.findById(req.params.id);
+
+        if (!employee) {
+            return res.status(404).json({ msg: 'Employee not found' });
+        } else {
+            const { name, gender, nic, address, contact, email, username } = req.body;
+            const moderator  =  await User.findOne({ 'username': username });
+            const modifiedBy = moderator._id;
+
+            employee.name = name;
+            employee.gender = gender;
+            employee.nic = nic;
+            employee.address = address;
+            employee.contact = contact;
+            employee.email = email;
+            employee.modifiedBy = modifiedBy;
+            employee.modifiedAt = Date.now();
+
+            const savedEmployee = await employee.save();
+            res.status(201).json(savedEmployee);
+        }
+    } catch(err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server Error.'});
     }
 });
 
-//Retrieve all the employees
-router.get("/get", async (req, res) => {
-    const employee = await Employee.find();
-
-    if (employee) {
-        res.status(200).json({
-            success: true,
-            data: employee
-        });
-    }
-    else {
-        res.status(400).json({
-            success: false,
-            message: 'No Employees Found'
-        });
-        throw new Error('No Employees Found');
-    }
-});
-
-//Update employee
-router.put("/update/:id", async (req, res) => {
-    const employee = await Employee.findById(req.params.id);
-
-    if (!employee) {
-        return res.status(400).json({
-            success: false,
-            message: 'No employees found'
-        });
-    } else {
-        const { name, gender, address, contact } = req.body;
-
-        employee.name = name;
-        employee.gender = gender;
-        employee.address= address;
-        employee.contact= contact;
-
-        await employee.save();
-
-        res.status(200).json({
-            success: true,
-            data: employee
-        });
+// Endpoint for retrieving one employee
+router.get('/get/:id', async (req, res) => {
+    try {
+        const employee = await Employee.findById(req.params.id);
+    
+        if (!employee) {
+          return res.status(404).json({ msg: 'Employee not found' });
+        }
+    
+        res.json(employee);
+    } catch (err) {
+        console.error(err.message);
+    
+        if (err.kind === 'ObjectId') {
+          return res.status(404).json({ msg: 'Employee not found' });
+        }
+    
+        res.status(500).send('Server Error');
     }
 });
 
-//Delete employee
+// Endpoint for retrieving all the employees
+router.get('/get-all', async (req, res) => {
+    try {
+        const employees = await Employee.find();
+        res.json(employees);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Endpoint for delete employee
 router.delete("/delete/:id", async (req, res)  => {
-    const employee = await Employee.findById(req.params.id);
-
-    if (!employee) {
-        return res.status(400).json({
-            success: false,
-            message: 'No data found'
-        });
-    } else {
-        await employee.deleteOne();
-        
-        res.status(200).json({
-            success: true,
-            message: 'Employee Removed Successfully'
-        });
+    try {
+        const employee = await Employee.findById(req.params.id);
+    
+        if (!employee) {
+          return res.status(404).json({ msg: 'Employee not found' });
+        } else {
+            await employee.deleteOne();
+            res.json({ message: 'Employee has been deleted' });
+        }
+    } catch (err) {
+        console.error(err.message);
+    
+        if (err.kind === 'ObjectId') {
+          return res.status(404).json({ msg: 'Employee not found' });
+        }
+    
+        res.status(500).send('Server Error');
     }
 });
 
