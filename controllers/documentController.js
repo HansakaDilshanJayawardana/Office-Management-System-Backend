@@ -10,10 +10,10 @@ router.post("/add", upload.single("file"), async (req, res, next) => {
         const file = req.file;
         const formData = req.body;
 
-        const { access, user } = formData;
+        const { access, token,user } = formData;
 
         //Validation
-        if (!access || !user) {
+        if (!access || !token) {
             return res.status(400).json({
                 success: false,
                 message: 'Please enter all fields'
@@ -29,7 +29,7 @@ router.post("/add", upload.single("file"), async (req, res, next) => {
             type: file.mimetype,
             size: file.size,
             access,
-            user
+            user: user
         });
 
         //save document
@@ -159,7 +159,7 @@ router.delete("/delete/:id", async (req, res) => {
             success: false,
             message: 'Document not found'
         });
-        throw new Error('Document not found');
+       
     }
 });
 
