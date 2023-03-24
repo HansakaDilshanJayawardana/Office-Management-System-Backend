@@ -1,54 +1,30 @@
 const Document = require("../models/document");
 const { Router } = require("express"); // import router from express
-const multer = require("multer");
 const router = Router();
-const upload = multer({ dest: "uploads/" });
 
 //Add Document
-router.post("/add", upload.single("file"), async (req, res, next) => {
+router.post("/add", async (req, res, next) => {
     try {
-        const file = req.file;
-        const formData = req.body;
-
-        const { access, token,user } = formData;
-
-        //Validation
-        if (!access || !token) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please enter all fields'
-            });
-        }
-
-        //check if document already exists
 
         //create document
-        const newDocument = new Document({
-            title: file.originalname,
-            url: file.path,
-            type: file.mimetype,
-            size: file.size,
-            access,
-            user: user
+        const document = new Document({
+            title: req.body.title,
+            url: req.body.url,
+            size: req.body.size,
+            access: req.body.access,
+            user: req.body.user,
+            createdAt: Date.now(),
+            type: req.body.type
         });
 
         //save document
-        await newDocument.save();
+        await document.save();
+        return res.status(201).json({
+            success: true,
+            data: document,
+            message: 'Document added'
+        });
 
-        if (newDocument) {
-            res.status(201).json({
-                success: true,
-                data: newDocument,
-                message: 'Document added'
-            });
-        }
-        else {
-            res.status(400).json({
-                success: false,
-                message: 'Document not added'
-            });
-            throw new Error('Document not added');
-        }
 
 
     }
@@ -58,7 +34,6 @@ router.post("/add", upload.single("file"), async (req, res, next) => {
 });
 
 //Retrieve all the documents for a user with public and shared documents
-
 router.get("/get/:id", async (req, res) => {
 
     //get all documents for the user
@@ -67,16 +42,18 @@ router.get("/get/:id", async (req, res) => {
     //get all documents public and shared
     const publicDocuments = await Document.find({ access: "public" });
 
-    //get all documents shared with the user
-    const sharedDocuments = await Document.find({ access: "shared" });
-
     //combine all documents
-    const allDocuments = [...documents, ...publicDocuments, ...sharedDocuments];
+    const allDocuments = [...documents, ...publicDocuments];
+
+    //remove duplicates
+    const uniqueDocuments = [...new Set(allDocuments.map(item => item.title))].map(title => {
+        return allDocuments.find(item => item.title === title)
+    })
 
     if (allDocuments) {
         res.status(200).json({
             success: true,
-            data: allDocuments
+            data: uniqueDocuments,
         });
     }
     else {
@@ -102,7 +79,7 @@ router.put("/edit/:id", async (req, res) => {
 
     //check if document exists
     const document = await Document.findById(req.params.id);
-    
+
     //if document exists
     if (document) {
         document.access = access;
@@ -159,13 +136,9 @@ router.delete("/delete/:id", async (req, res) => {
             success: false,
             message: 'Document not found'
         });
-       
+
     }
 });
-
-
-
-
 
 
 module.exports = router;
