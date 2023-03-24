@@ -20,8 +20,8 @@ router.post('/add', async (req, res) => {
     }
     
     // Create a new employee
-    const creator  =  await User.findOne({ 'username': username });
-    const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
+    // const creator  =  await User.findOne({ 'username': username });
+    // const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
     const employee = new Employee({
       name,
       gender,
@@ -29,7 +29,7 @@ router.post('/add', async (req, res) => {
       address,
       contact,
       email,
-      createdBy,
+      // createdBy,
       createdAt: Date.now()
     });
 
@@ -51,8 +51,8 @@ router.put('/update/:id', async (req, res) => {
             return res.status(404).json({ msg: 'Employee not found' });
         } else {
             const { name, gender, nic, address, contact, email, username } = req.body;
-            const moderator  =  await User.findOne({ 'username': username });
-            const modifiedBy = moderator._id;
+            // const moderator  =  await User.findOne({ 'username': username });
+            // const modifiedBy = moderator._id;
 
             employee.name = name;
             employee.gender = gender;
@@ -60,7 +60,7 @@ router.put('/update/:id', async (req, res) => {
             employee.address = address;
             employee.contact = contact;
             employee.email = email;
-            employee.modifiedBy = modifiedBy;
+            // employee.modifiedBy = modifiedBy;
             employee.modifiedAt = Date.now();
 
             const savedEmployee = await employee.save();
