@@ -31,7 +31,8 @@ router.post("/add", async (req, res) => {
         name,
         quantity,
         price, 
-        description
+        description,
+        createdAt: Date.now(),
     });
 
     //save inventory
@@ -57,7 +58,7 @@ router.get("/get", async (req, res) => {
     const inventory = await Inventory.find();
 
     if (inventory) {
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             data: inventory
         });
@@ -90,7 +91,7 @@ router.put("/update/:id", async (req, res) => {
 
         await inventory.save();
 
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             data: inventory
         });
@@ -109,7 +110,7 @@ router.delete("/delete/:id", async (req, res)  => {
     } else {
         await inventory.deleteOne();
         
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             message: 'Inventory deleted successfully'
         });
