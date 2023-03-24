@@ -21,7 +21,7 @@ const EmployeeSchema = new mongoose.Schema({
     },
 
     contact: {
-        type:Number,
+        type: String,
         unique: true
     },
 

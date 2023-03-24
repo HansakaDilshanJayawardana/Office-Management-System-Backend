@@ -21,8 +21,8 @@ router.post('/add', async (req, res) => {
     }
     
     // Create a new client
-    const creator  =  await User.findOne({ 'username': username });
-    const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
+    // const creator  =  await User.findOne({ 'username': username });
+    // const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
     const client = new Client({
       firstName,
       lastName,
@@ -32,7 +32,7 @@ router.post('/add', async (req, res) => {
       mobile,
       email,
       registerDate: Date.now(),
-      createdBy,
+      // createdBy,
       createdAt: Date.now()
     });
 
@@ -86,8 +86,8 @@ router.put('/update/:id', async (req, res) => {
             return res.status(404).json({ msg: 'Client not found' });
         } else {
             const { firstName, lastName, gender, nic, address, mobile, email, username } = req.body;
-            const moderator  =  await User.findOne({ 'username': username });
-            const modifiedBy = moderator._id;
+            // const moderator  =  await User.findOne({ 'username': username });
+            // const modifiedBy = moderator._id;
 
             client.firstName = firstName;
             client.lastName = lastName;
@@ -96,7 +96,7 @@ router.put('/update/:id', async (req, res) => {
             client.address = address;
             client.mobile = mobile;
             client.email = email;
-            client.modifiedBy = modifiedBy;
+            // client.modifiedBy = modifiedBy;
             client.modifiedAt = Date.now();
 
             const savedClient = await client.save();

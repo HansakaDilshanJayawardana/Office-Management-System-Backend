@@ -19,7 +19,12 @@ const InventorySchema = new mongoose.Schema({
     description: {
         type:String,
         required:true
-    }
+    },
+
+    createdAt: {//date the file was created
+        type: Date
+    },
+
 });
 
 const Inventory = mongoose.model('Inventory',InventorySchema);

@@ -23,7 +23,7 @@ const ClientSchema = new mongoose.Schema({
     },
 
     mobile: {
-        type: Number,
+        type: String,
         unique: true
     },
 
@@ -31,11 +31,6 @@ const ClientSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
-
-    // profilePicUrl: {
-    //     type: String,
-    //     default: '',
-    // },
 
     registerDate: {
         type: Date
