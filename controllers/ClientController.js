@@ -1,28 +1,42 @@
 const Client = require('../models/Client');
 const { Router } = require("express");
-// const multer = require("multer");
 const router = Router();
-// const upload = multer({ dest: "uploads/client_pic" });
 const User = require('../models/User');
 
 // Endpoint for adding a new client
 router.post('/add', async (req, res) => {
   try {
-    // Validate the request body
-    const { firstName, lastName, gender, nic, address, mobile, email, username } = req.body;
+    // Validate the request body (Null Value Validation)
+    const { firstName, lastName, gender, nic, address, mobile, email } = req.body;
     if (!firstName || !lastName || !gender || !nic || !address || !mobile || !email) {
-      return res.status(400).json({ message: 'All fields are required.' });
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Mobile Number Validation
+    const mobileNumberRegex = /^[0-9]{10}$/;
+    if (!mobileNumberRegex.test(mobile)) {
+      return res.status(400).json({ message: 'Please enter a valid 10 digit mobile number' });
+    }
+
+    // Email Number Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Please enter a valid email address' });
+    }
+
+    // NIC Number (SL) Validation
+    const nicRegex = /^[0-9]{9}[vVxX]$/;
+    if (!nicRegex.test(nic)) {
+      return res.status(400).json({ message: 'Please enter a valid NIC' });
     }
 
     // Check if the email is already registered
     const existingClient = await Client.findOne({ email });
     if (existingClient) {
-      return res.status(400).json({ message: 'Client already exists.' });
+      return res.status(400).json({ message: 'Client already exists' });
     }
     
     // Create a new client
-    // const creator  =  await User.findOne({ 'username': username });
-    // const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
     const client = new Client({
       firstName,
       lastName,
@@ -32,7 +46,6 @@ router.post('/add', async (req, res) => {
       mobile,
       email,
       registerDate: Date.now(),
-      // createdBy,
       createdAt: Date.now()
     });
 
@@ -41,7 +54,7 @@ router.post('/add', async (req, res) => {
     res.status(201).json(client);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: 'Server Error.' });
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 
@@ -85,9 +98,29 @@ router.put('/update/:id', async (req, res) => {
         if (!client) {
             return res.status(404).json({ msg: 'Client not found' });
         } else {
-            const { firstName, lastName, gender, nic, address, mobile, email, username } = req.body;
-            // const moderator  =  await User.findOne({ 'username': username });
-            // const modifiedBy = moderator._id;
+            // Validate the request body (Null Value Validation)
+            const { firstName, lastName, gender, nic, address, mobile, email } = req.body;
+            if (!firstName || !lastName || !gender || !nic || !address || !mobile || !email) {
+              return res.status(400).json({ message: 'All fields are required' });
+            }
+
+            // Mobile Number Validation
+            const mobileNumberRegex = /^[0-9]{10}$/;
+            if (!mobileNumberRegex.test(mobile)) {
+              return res.status(400).json({ message: 'Please enter a valid 10 digit mobile number' });
+            }
+
+            // Email Number Validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+              return res.status(400).json({ message: 'Please enter a valid email address' });
+            }
+
+            // NIC Number (SL) Validation
+            const nicRegex = /^[0-9]{9}[vVxX]$/;
+            if (!nicRegex.test(nic)) {
+              return res.status(400).json({ message: 'Please enter a valid NIC' });
+            }
 
             client.firstName = firstName;
             client.lastName = lastName;
@@ -96,7 +129,6 @@ router.put('/update/:id', async (req, res) => {
             client.address = address;
             client.mobile = mobile;
             client.email = email;
-            // client.modifiedBy = modifiedBy;
             client.modifiedAt = Date.now();
 
             const savedClient = await client.save();
@@ -104,7 +136,7 @@ router.put('/update/:id', async (req, res) => {
         }
     } catch(err) {
         console.error(err.message);
-        res.status(500).json({ message: 'Server Error.'});
+        res.status(500).json({ message: 'Server Error'});
     }
 });
 

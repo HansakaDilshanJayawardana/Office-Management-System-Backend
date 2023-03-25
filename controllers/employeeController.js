@@ -7,21 +7,37 @@ const router = Router();
 // Endpoint for adding a new employee
 router.post('/add', async (req, res) => {
   try {
-    // Validate the request body
-    const { name, gender, nic, address, contact, email, username } = req.body;
+    // Validate the request body (Null Value Validation)
+    const { name, gender, nic, address, contact, email } = req.body;
     if (!name || !gender || !nic || !address || !contact || !email) {
-      return res.status(400).json({ message: 'All fields are required.' });
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Contact Number Validation
+    const contactNumberRegex = /^[0-9]{10}$/;
+    if (!contactNumberRegex.test(contact)) {
+      return res.status(400).json({ message: 'Please enter a valid 10 digit contact number' });
+    }
+
+    // Email Number Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Please enter a valid email address' });
+    }
+
+    // NIC Number (SL) Validation
+    const nicRegex = /^[0-9]{9}[vVxX]$/;
+    if (!nicRegex.test(nic)) {
+      return res.status(400).json({ message: 'Please enter a valid NIC' });
     }
 
     // Check if the email is already registered
     const existingEmployee = await Employee.findOne({ email });
     if (existingEmployee) {
-      return res.status(400).json({ message: 'Employee already exists.' });
+      return res.status(400).json({ message: 'Employee already exists' });
     }
     
     // Create a new employee
-    // const creator  =  await User.findOne({ 'username': username });
-    // const createdBy = creator._id; // assuming you have a middleware that adds the user id to the request object
     const employee = new Employee({
       name,
       gender,
@@ -29,7 +45,6 @@ router.post('/add', async (req, res) => {
       address,
       contact,
       email,
-      // createdBy,
       createdAt: Date.now()
     });
 
@@ -50,17 +65,36 @@ router.put('/update/:id', async (req, res) => {
         if (!employee) {
             return res.status(404).json({ msg: 'Employee not found' });
         } else {
-            const { name, gender, nic, address, contact, email, username } = req.body;
-            // const moderator  =  await User.findOne({ 'username': username });
-            // const modifiedBy = moderator._id;
-
+            // Validate the request body (Null Value Validation)
+            const { name, gender, nic, address, contact, email } = req.body;
+            if (!name || !gender || !nic || !address || !contact || !email) {
+              return res.status(400).json({ message: 'All fields are required' });
+            }
+        
+            // Contact Number Validation
+            const contactNumberRegex = /^[0-9]{10}$/;
+            if (!contactNumberRegex.test(contact)) {
+              return res.status(400).json({ message: 'Please enter a valid 10 digit contact number' });
+            }
+        
+            // Email Number Validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+              return res.status(400).json({ message: 'Please enter a valid email address' });
+            }
+        
+            // NIC Number (SL) Validation
+            const nicRegex = /^[0-9]{9}[vVxX]$/;
+            if (!nicRegex.test(nic)) {
+              return res.status(400).json({ message: 'Please enter a valid NIC' });
+            }
+        
             employee.name = name;
             employee.gender = gender;
             employee.nic = nic;
             employee.address = address;
             employee.contact = contact;
             employee.email = email;
-            // employee.modifiedBy = modifiedBy;
             employee.modifiedAt = Date.now();
 
             const savedEmployee = await employee.save();

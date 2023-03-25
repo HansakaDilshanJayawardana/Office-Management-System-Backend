@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const {Schema, model} = require("../db/connection")
 
 const EmployeeSchema = new mongoose.Schema({
     
