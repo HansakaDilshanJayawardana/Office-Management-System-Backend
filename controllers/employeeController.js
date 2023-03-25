@@ -37,7 +37,7 @@ router.post('/add', async (req, res) => {
       return res.status(400).json({ message: 'Employee already exists' });
     }
     
-    // Create a new employee
+    // add a new employee
     const employee = new Employee({
       name,
       gender,
@@ -109,6 +109,7 @@ router.put('/update/:id', async (req, res) => {
 // Endpoint for retrieving one employee
 router.get('/get/:id', async (req, res) => {
     try {
+      //find employee by id
         const employee = await Employee.findById(req.params.id);
     
         if (!employee) {
