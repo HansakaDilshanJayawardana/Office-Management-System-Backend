@@ -1,4 +1,4 @@
-# Group ID
+# Group ID: 32
 ## Office Management System - Backend
 
 ## Group Details
@@ -20,11 +20,11 @@ Language - NodeJS | Database - MongoDB | IDE - VS Code | Integrate Technology Se
 
 ## How to get started with your app
 ### Prerequisites
-1. 
+1. NodeJS
 2. 
 3. 
 
 ### Procedure of setting up Prerequisites and run the project
-1. 
-2. 
-3. 
+1. Open the code via VS Code
+2. Run the npm i command in the terminal of VS Code
+3. Run the npm run dev command in the terminal of VS Code
